@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import SignUpForm from './components/SignUpForm';
 import ChallengesPage from './components/ChallengesPage';
+import LoginForm from './components/LoginForm'; // Import the LoginForm component
 import './App.css'; // Ensure you import the Tailwind CSS here
 
 const App = () => {
     const [showSignUpForm, setShowSignUpForm] = useState(false);
+    const [showLoginForm, setShowLoginForm] = useState(false);
     const [currentPage, setCurrentPage] = useState('home');
 
     const openSignUpForm = () => setShowSignUpForm(true);
     const closeSignUpForm = () => setShowSignUpForm(false);
+
+    const openLoginForm = () => setShowLoginForm(true);
+    const closeLoginForm = () => setShowLoginForm(false);
 
     const goToChallenges = () => setCurrentPage('challenges');
     const goToHome = () => setCurrentPage('home');
@@ -36,7 +41,10 @@ const App = () => {
                         <p className="mt-4 text-gray-600">Welcome to the Fitness App! Our platform offers a variety of challenges to keep you motivated on your fitness journey.</p>
                         <p className="mt-2 text-gray-600">Whether you're looking to walk 10,000 steps a day or engage in high-intensity workouts, we have something for everyone.</p>
                         <p className="mt-2 text-gray-600">Join us and be a part of a community that strives for health and fitness.</p>
-                        <button onClick={openSignUpForm} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Join Now</button>
+                        <div className="mt-4 space-x-4">
+                            <button onClick={openSignUpForm} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Create account</button>
+                            <button onClick={openLoginForm} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Login</button>
+                        </div>
                     </section>
 
                     {/* How it works Section */}
@@ -92,6 +100,8 @@ const App = () => {
 
             {/* SignUpForm Modal */}
             {showSignUpForm && <SignUpForm closeModal={closeSignUpForm} />}
+            {/* LoginForm Modal */}
+            {showLoginForm && <LoginForm closeModal={closeLoginForm} />}
         </div>
     );
 };
