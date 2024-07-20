@@ -37,6 +37,12 @@ app.post('/signup', async (req, res) => {
         const db = await connectToDatabase();
         const collection = db.collection('users');
 
+        // Check if the email already exists
+        const existingUser = await collection.findOne({ email });
+        if (existingUser) {
+            return res.status(409).json({ message: 'Email already exists' });
+        }
+
         const newUser = {
             firstName,
             lastName,

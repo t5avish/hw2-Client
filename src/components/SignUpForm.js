@@ -12,6 +12,9 @@ const SignUpForm = ({ closeModal }) => {
         gender: ''
     });
 
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(false);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -33,26 +36,31 @@ const SignUpForm = ({ closeModal }) => {
             });
 
             const result = await response.json();
-            console.log(result.message); // Log success or error message
-
             if (response.ok) {
-                closeModal();
+                setSuccessMessage(true);
+                setErrorMessage('');
+            } else {
+                setErrorMessage(result.message);
+                setSuccessMessage(false);
             }
         } catch (error) {
             console.error('Error:', error);
+            setErrorMessage('An error occurred. Please try again later.');
+            setSuccessMessage(false);
         }
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-            <div className="bg-white p-8 rounded shadow-lg relative">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-10">
+            <div className="bg-white p-8 rounded shadow-lg relative z-20 w-full max-w-lg">
                 <button 
                     onClick={closeModal} 
-                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 z-30"
                 >
                     &times;
                 </button>
                 <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+                {errorMessage && <div className="mb-4 text-red-500">{errorMessage}</div>}
                 <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-4">
@@ -175,6 +183,11 @@ const SignUpForm = ({ closeModal }) => {
                         Sign Up
                     </button>
                 </form>
+                {successMessage && (
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mt-4 bg-white p-4 rounded shadow-lg z-30">
+                        <p className="text-green-500">User created successfully!</p>
+                    </div>
+                )}
             </div>
         </div>
     );
