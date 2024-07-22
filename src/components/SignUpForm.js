@@ -27,7 +27,7 @@ const SignUpForm = ({ closeModal }) => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:3000/api/signup', {
+            const response = await fetch('https://hw2-server-8uuug0n8y-t5avishs-projects.vercel.app/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
