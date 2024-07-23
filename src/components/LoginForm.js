@@ -11,11 +11,6 @@ const LoginForm = ({ closeModal }) => {
         closeModal();
     };
 
-    const handleForgotPassword = () => {
-        // Add logic for forgot password
-        console.log('Forgot password');
-    };
-
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-10">
             <div className="bg-white p-8 rounded shadow-lg relative z-20 w-full max-w-lg">
@@ -58,12 +53,6 @@ const LoginForm = ({ closeModal }) => {
                         Login
                     </button>
                 </form>
-                <button 
-                    onClick={handleForgotPassword} 
-                    className="mt-4 text-blue-500 hover:underline"
-                >
-                    Forgot my password
-                </button>
             </div>
         </div>
     );

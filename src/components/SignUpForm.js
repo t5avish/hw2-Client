@@ -40,7 +40,7 @@ const SignUpForm = ({ closeModal }) => {
                 setSuccessMessage(true);
                 setErrorMessage('');
             } else {
-                setErrorMessage(result.message);
+                setErrorMessage(result.message || 'An error occurred. Please try again later.');
                 setSuccessMessage(false);
             }
         } catch (error) {
