@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SignUpForm from './components/SignUpForm';
 import ChallengesPage from './components/ChallengesPage';
-import LoginForm from './components/LoginForm'; // Import the LoginForm component
+import LoginForm from './components/LoginForm';
 import './App.css'; // Ensure you import the Tailwind CSS here
 
 const App = () => {
     const [showSignUpForm, setShowSignUpForm] = useState(false);
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [currentPage, setCurrentPage] = useState('home');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        // Check if token exists in local storage to set login state on initial load
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoggedIn(true);
+        }
+    }, []);
 
     const openSignUpForm = () => setShowSignUpForm(true);
     const closeSignUpForm = () => setShowSignUpForm(false);
@@ -17,6 +26,19 @@ const App = () => {
 
     const goToChallenges = () => setCurrentPage('challenges');
     const goToHome = () => setCurrentPage('home');
+
+    const handleLogin = () => {
+        // Set logged-in state to true
+        setIsLoggedIn(true);
+        closeLoginForm();
+    };
+
+    const handleLogout = () => {
+        // Clear token and logged-in state
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        goToHome(); // Optionally redirect to home or login page
+    };
 
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -29,6 +51,11 @@ const App = () => {
                         <a href="#" onClick={goToChallenges} className="text-gray-300 hover:text-white">Challenges</a>
                         <a href="#" className="text-gray-300 hover:text-white">Profile</a>
                         <a href="#" className="text-gray-300 hover:text-white">Chat</a>
+                        {isLoggedIn ? (
+                            <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">Log Out</button>
+                        ) : (
+                            <button onClick={openLoginForm} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Log In</button>
+                        )}
                     </div>
                 </div>
             </nav>
@@ -43,7 +70,6 @@ const App = () => {
                         <p className="mt-2 text-gray-600">Join us and be a part of a community that strives for health and fitness.</p>
                         <div className="mt-4 space-x-4">
                             <button onClick={openSignUpForm} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Create account</button>
-                            <button onClick={openLoginForm} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Login</button>
                         </div>
                     </section>
 
@@ -101,7 +127,7 @@ const App = () => {
             {/* SignUpForm Modal */}
             {showSignUpForm && <SignUpForm closeModal={closeSignUpForm} />}
             {/* LoginForm Modal */}
-            {showLoginForm && <LoginForm closeModal={closeLoginForm} />}
+            {showLoginForm && <LoginForm closeModal={closeLoginForm} onLogin={handleLogin} />}
         </div>
     );
 };
