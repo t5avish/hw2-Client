@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SignUpForm from './components/SignUpForm';
 import ChallengesPage from './components/ChallengesPage';
 import LoginForm from './components/LoginForm';
+import ProfilePage from './components/ProfilePage';
 import './App.css'; // Ensure you import the Tailwind CSS here
 
 const App = () => {
@@ -11,7 +12,6 @@ const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        // Check if token exists in local storage to set login state on initial load
         const token = localStorage.getItem('token');
         if (token) {
             setIsLoggedIn(true);
@@ -26,18 +26,22 @@ const App = () => {
 
     const goToChallenges = () => setCurrentPage('challenges');
     const goToHome = () => setCurrentPage('home');
+    const goToProfile = () => {
+        if (isLoggedIn) {
+            setCurrentPage('profile');
+        }
+        // Do nothing if not logged in
+    };
 
     const handleLogin = () => {
-        // Set logged-in state to true
         setIsLoggedIn(true);
         closeLoginForm();
     };
 
     const handleLogout = () => {
-        // Clear token and logged-in state
         localStorage.removeItem('token');
         setIsLoggedIn(false);
-        goToHome(); // Optionally redirect to home or login page
+        goToHome();
     };
 
     return (
@@ -49,7 +53,7 @@ const App = () => {
                     <div className="space-x-4">
                         <a href="#" onClick={goToHome} className="text-gray-300 hover:text-white">Home</a>
                         <a href="#" onClick={goToChallenges} className="text-gray-300 hover:text-white">Challenges</a>
-                        <a href="#" className="text-gray-300 hover:text-white">Profile</a>
+                        <a href="#" onClick={goToProfile} className="text-gray-300 hover:text-white">Profile</a>
                         <a href="#" className="text-gray-300 hover:text-white">Chat</a>
                         {isLoggedIn ? (
                             <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">Log Out</button>
@@ -79,40 +83,40 @@ const App = () => {
                         <div className="flex flex-wrap items-center justify-center">
                             <div className="w-full lg:w-1/2">
                                 <ol className="space-y-8">
-                                    <li className="flex items-start">
-                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-4">
-                                            1
+                                    <li className="flex items-center space-x-4">
+                                        <div className="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full">
+                                            <span className="text-2xl">1</span>
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold text-gray-800">Join Us</h3>
-                                            <p className="text-gray-600">Create an account or log in to start your fitness journey. Joining is quick and easy, and you'll gain access to all our features.</p>
+                                            <h3 className="text-xl font-semibold text-gray-800">Sign Up</h3>
+                                            <p className="text-gray-600">Create an account with your email and password to start tracking your fitness journey.</p>
                                         </div>
                                     </li>
-                                    <li className="flex items-start">
-                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-4">
-                                            2
+                                    <li className="flex items-center space-x-4">
+                                        <div className="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full">
+                                            <span className="text-2xl">2</span>
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold text-gray-800">Create or Join a Challenge</h3>
-                                            <p className="text-gray-600">Choose from a variety of challenges or create your own. Whether you prefer solo activities or group challenges, there's something for everyone.</p>
+                                            <h3 className="text-xl font-semibold text-gray-800">Join Challenges</h3>
+                                            <p className="text-gray-600">Explore various fitness challenges and join those that fit your goals and interests.</p>
                                         </div>
                                     </li>
-                                    <li className="flex items-start">
-                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-4">
-                                            3
+                                    <li className="flex items-center space-x-4">
+                                        <div className="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full">
+                                            <span className="text-2xl">3</span>
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold text-gray-800">Track Your Progress</h3>
-                                            <p className="text-gray-600">Monitor your progress through detailed statistics and insights. Keep track of your achievements and stay motivated as you reach your goals.</p>
+                                            <h3 className="text-xl font-semibold text-gray-800">Track Progress</h3>
+                                            <p className="text-gray-600">Log your workouts and monitor your progress through your profile page.</p>
                                         </div>
                                     </li>
-                                    <li className="flex items-start">
-                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-4">
-                                            4
+                                    <li className="flex items-center space-x-4">
+                                        <div className="w-12 h-12 bg-blue-500 text-white flex items-center justify-center rounded-full">
+                                            <span className="text-2xl">4</span>
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold text-gray-800">Talk with Others</h3>
-                                            <p className="text-gray-600">Engage with the community by discussing challenges, sharing tips, and motivating each other. Our chat feature allows you to connect with like-minded individuals.</p>
+                                            <h3 className="text-xl font-semibold text-gray-800">Achieve Goals</h3>
+                                            <p className="text-gray-600">Complete challenges, earn rewards, and reach your fitness goals with the support of our community.</p>
                                         </div>
                                     </li>
                                 </ol>
@@ -123,6 +127,7 @@ const App = () => {
             )}
 
             {currentPage === 'challenges' && <ChallengesPage goBack={goToHome} />}
+            {currentPage === 'profile' && isLoggedIn && <ProfilePage />} {/* Conditionally render ProfilePage */}
 
             {/* SignUpForm Modal */}
             {showSignUpForm && <SignUpForm closeModal={closeSignUpForm} />}
