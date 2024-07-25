@@ -9,6 +9,11 @@ const AvatarSelector = ({ onSelect }) => {
     'avatar5.png',
     'avatar6.png',
     'avatar7.png',
+    'avatar8.png',
+    'avatar9.png',
+    'avatar10.png',
+    'avatar11.png',
+    'profile-pic.png',
     // Add more avatar filenames here
   ];
 
