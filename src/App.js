@@ -24,13 +24,17 @@ const App = () => {
     const openLoginForm = () => setShowLoginForm(true);
     const closeLoginForm = () => setShowLoginForm(false);
 
-    const goToChallenges = () => setCurrentPage('challenges');
+
+    const goToChallenges = () => {
+        if (isLoggedIn) {
+            setCurrentPage('challenges');
+        }
+    };
     const goToHome = () => setCurrentPage('home');
     const goToProfile = () => {
         if (isLoggedIn) {
             setCurrentPage('profile');
         }
-        // Do nothing if not logged in
     };
 
     const handleLogin = () => {
