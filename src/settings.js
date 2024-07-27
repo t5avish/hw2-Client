@@ -1,1 +1,1 @@
-export const URL = "http://localhost:3000/api/"
+export const URL = "https://hw2-server-grq5.vercel.app/"
