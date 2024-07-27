@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { URL } from '../settings'
 
 const SignUpForm = ({ closeModal }) => {
     const [formData, setFormData] = useState({
@@ -28,7 +27,7 @@ const SignUpForm = ({ closeModal }) => {
         e.preventDefault();
 
         try {
-            const response = await fetch(URL + 'signup', {
+            const response = await fetch('http://localhost:3000/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

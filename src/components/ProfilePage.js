@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AvatarSelector from './AvatarSelector';
 import 'tailwindcss/tailwind.css';
-import { URL } from '../settings'
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -20,7 +19,7 @@ const ProfilePage = () => {
       }
 
       try {
-        const response = await fetch(URL + 'profile', {
+        const response = await fetch('http://localhost:3000/api/profile', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -56,7 +55,7 @@ const ProfilePage = () => {
     }
 
     try {
-      const response = await fetch(URL + 'profile', {
+      const response = await fetch('http://localhost:3000/api/profile', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
