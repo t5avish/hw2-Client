@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { URL } from '../settings'
 const ChallengesPage = () => {
   const [challenges, setChallenges] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -9,7 +9,7 @@ const ChallengesPage = () => {
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/challenges', {
+        const response = await fetch(URL + 'challenges', {
           method: 'GET',
           credentials: 'include', // If you need to include cookies or authentication headers
         });
@@ -34,7 +34,7 @@ const ChallengesPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/challenges', {
+      const response = await fetch(URL + 'challenges', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

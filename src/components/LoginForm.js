@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { URL } from '../settings'
 
 const LoginForm = ({ closeModal, onLogin }) => {
   const [email, setEmail] = useState('');
@@ -9,7 +10,7 @@ const LoginForm = ({ closeModal, onLogin }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch(URL + 'login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
