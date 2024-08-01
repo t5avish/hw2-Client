@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { URL } from '../settings'
+import { URL } from '../settings';
+
 const ChallengesPage = () => {
   const [challenges, setChallenges] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState('');
+  const [numDays, setNumDays] = useState('');
+  const [measurement, setMeasurement] = useState('time');
+  const [goal, setGoal] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
@@ -28,8 +32,8 @@ const ChallengesPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!title || !description) {
-      alert('Please fill in both fields');
+    if (!title || !description || !numDays || !goal) {
+      alert('Please fill in all fields');
       return;
     }
 
@@ -39,12 +43,15 @@ const ChallengesPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({ title, description, numDays, measurement, goal }),
       });
       if (response.ok) {
         const newChallenge = await response.json();
         setChallenges([...challenges, newChallenge]);
         setTitle('');
+        setNumDays('');
+        setMeasurement('time');
+        setGoal('');
         setDescription('');
         setShowForm(false);
       } else {
@@ -55,9 +62,39 @@ const ChallengesPage = () => {
     }
   };
 
+  const handleJoinChallenge = async (challengeId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Not authenticated');
+        return;
+      }
+
+      const response = await fetch(URL + 'challenges', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ challengeId }),
+      });
+      if (response.ok) {
+        alert('Successfully joined the challenge');
+      } else {
+        alert('Failed to join the challenge');
+      }
+    } catch (error) {
+      console.error('Failed to join challenge:', error);
+    }
+  };
+
   const handleFormClose = () => {
     setShowForm(false);
     setTitle('');
+    setNumDays('');
+    setMeasurement('time');
+    setGoal('');
     setDescription('');
   };
 
@@ -73,7 +110,12 @@ const ChallengesPage = () => {
           <div key={challenge._id} className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-xl font-bold text-gray-800 mb-2">{challenge.title}</h3>
             <p className="text-gray-600 mb-4">{challenge.description}</p>
-            <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Join Challenge</button>
+            <button
+              onClick={() => handleJoinChallenge(challenge._id)}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            >
+              Join Challenge
+            </button>
           </div>
         ))}
       </div>
@@ -101,6 +143,39 @@ const ChallengesPage = () => {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="border p-2 w-full rounded"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Number of days:</label>
+                <input
+                  type="number"
+                  value={numDays}
+                  onChange={(e) => setNumDays(e.target.value)}
+                  className="border p-2 w-full rounded"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Type of measurement:</label>
+                <select
+                  value={measurement}
+                  onChange={(e) => setMeasurement(e.target.value)}
+                  className="border p-2 w-full rounded"
+                  required
+                >
+                  <option value="time">Time</option>
+                  <option value="length">Length</option>
+                </select>
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Goal:</label>
+                <input
+                  type="number"
+                  value={goal}
+                  onChange={(e) => setGoal(e.target.value)}
+                  className="border p-2 w-full rounded"
+                  required
                 />
               </div>
               <div className="mb-4">
@@ -109,6 +184,7 @@ const ChallengesPage = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="border p-2 w-full rounded"
+                  required
                 />
               </div>
               <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Submit</button>
